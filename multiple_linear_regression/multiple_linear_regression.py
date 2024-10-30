@@ -15,7 +15,7 @@ import numpy as np
 from sklearn.linear_model import LinearRegression
 
 # Veri yükleme
-df = pd.read_csv('multiple_linear_regression_dataset.csv', sep=";")
+df = pd.read_csv('../multiple_linear_regression_dataset.csv', sep=";")
 x = df.iloc[:, [0, 2]].values  # 'deneyim' ve 'yas' sütunları
 y = df['maas'].values.reshape(-1, 1)
 
