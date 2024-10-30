@@ -8,18 +8,46 @@
 #b0,b1,b2
 # AMACIMIZ MEAN SQUARE ERROR'umuzu minimuma düşürmek
 
+import os
 import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 from sklearn.linear_model import LinearRegression
 
-df=pd.read_csv('multiple_linear_regression_dataset.csv',sep=";")
-x = df.iloc[:, [0, 2]].values  # Adjusted to select columns as 2D
+# Veri yükleme
+df = pd.read_csv('multiple_linear_regression_dataset.csv', sep=";")
+x = df.iloc[:, [0, 2]].values  # 'deneyim' ve 'yas' sütunları
 y = df['maas'].values.reshape(-1, 1)
 
-multiple_linear_regression=LinearRegression()
-multiple_linear_regression.fit(x,y)
+# Model oluşturma
+multiple_linear_regression = LinearRegression()
+multiple_linear_regression.fit(x, y)
 
-print("b0",multiple_linear_regression.intercept_)
-print("b1,b2",multiple_linear_regression.coef_)
-print(multiple_linear_regression.predict(np.array([[10,35],[5,35]])))
+# Sonuçları yazdırma
+print("b0:", multiple_linear_regression.intercept_)
+print("b1, b2:", multiple_linear_regression.coef_)
+print(multiple_linear_regression.predict(np.array([[10, 35], [5, 35]])))
+
+# Klasör yolunu belirleme ve oluşturma
+output_dir = "images/multiple_linear_regression"
+os.makedirs(output_dir, exist_ok=True)
+
+# Deneyime göre maaşı görselleştirme ve kaydetme
+plt.scatter(df['deneyim'], y, color='blue', label="Gerçek Maaş")
+plt.plot(df['deneyim'], multiple_linear_regression.predict(x), color='red', label="Tahmin Edilen Maaş")
+plt.xlabel("Deneyim")
+plt.ylabel("Maaş")
+plt.legend()
+plt.title("Deneyime Göre Maaş Tahmini")
+plt.savefig(os.path.join(output_dir, "experience_vs_salary.png"))
+plt.close()  # Grafiği kapatma
+
+# Yaşa göre maaşı görselleştirme ve kaydetme
+plt.scatter(df['yas'], y, color='blue', label="Gerçek Maaş")
+plt.plot(df['yas'], multiple_linear_regression.predict(x), color='red', label="Tahmin Edilen Maaş")
+plt.xlabel("Yaş")
+plt.ylabel("Maaş")
+plt.legend()
+plt.title("Yaşa Göre Maaş Tahmini")
+plt.savefig(os.path.join(output_dir, "age_vs_salary.png"))
+plt.close()  # Grafiği kapatma
